@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muskan ❤️ Sahil Forever</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#ffb6c9,#ff5c91,#ffb3d1);
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    padding: 25px 15px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.screen.active {
+    display: flex;
+}
+
+h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(45px,10vw,75px);
+    font-weight: normal;
+    text-shadow: 0 0 20px #ff1766;
+}
+
+h2 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 42px;
+    font-weight: normal;
+}
+
+p {
+    line-height: 1.8;
+}
+
+.heart {
+    font-size: 80px;
+    animation: heartbeat 1.2s infinite;
+    filter: drop-shadow(0 0 20px red);
+}
+
+@keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.btn {
+    border: none;
+    padding: 15px 25px;
+    border-radius: 40px;
+    background: linear-gradient(135deg,#ff174f,#ff76ad);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 0 25px #ff3c82;
+    cursor: pointer;
+    transition: .3s;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    transform: scale(1.06);
+}
+
+.heart-btn {
+    width: 150px;
+    height: 140px;
+    background: #ff174f;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    margin: 35px 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 0 35px #ff174f;
+    animation: heartbeat 1.3s infinite;
+}
+
+.heart-btn::before,
+.heart-btn::after {
+    content: "";
+    width: 150px;
+    height: 140px;
+    background: #ff174f;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.heart-btn::before {
+    top: -75px;
+    left: 0;
+}
+
+.heart-btn::after {
+    left: 75px;
+    top: 0;
+}
+
+.heart-btn span {
+    position: absolute;
+    z-index: 5;
+    width: 220px;
+    left: -35px;
+    top: 45px;
+    transform: rotate(45deg);
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+}
+
+.card {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(255,255,255,.16);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,.4);
+    padding: 30px 22px;
+    border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(180,0,70,.25);
+}
+
+.question {
+    font-size: 20px;
+    margin: 20px 0;
+    font-weight: 600;
+}
+
+.option {
+    width: 100%;
+    display: block;
+    padding: 14px;
+    border: 1px solid white;
+    background: rgba(255,255,255,.15);
+    color: white;
+    border-radius: 16px;
+    margin: 12px 0;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.option:hover {
+    background: rgba(255,255,255,.3);
+}
+
+.option.correct {
+    background: #19a96b;
+}
+
+.option.wrong {
+    background: #ff3434;
+}
+
+.progress {
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+#feedback {
+    min-height: 30px;
+    margin-top: 12px;
+}
+
+.scratch-box {
+    width: 300px;
+    max-width: 90vw;
+    height: 200px;
+    border-radius: 25px;
+    position: relative;
+    margin: 25px auto;
+    overflow: hidden;
+    box-shadow: 0 0 30px #ff0055;
+}
+
+.scratch-message {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,#fff0f6,#ff9ecb);
+    color: #ff1766;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    font-family: 'Great Vibes',cursive;
+    font-size: 35px;
+}
+
+canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    cursor: crosshair;
+}
+
+.final-message {
+    font-size: 15px;
+    line-height: 2.1;
+    white-space: pre-line;
+}
+
+.final-message strong {
+    font-size: 20px;
+}
+
+.floating-heart {
+    position: fixed;
+    bottom: -30px;
+    font-size: 20px;
+    animation: float 7s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) rotate(0); opacity: 1; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+}
+
+.small {
+    font-size: 13px;
+    opacity: .9;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="loveSong" src="song.mp3" loop></audio>
+
+<!-- START SCREEN -->
+<section class="screen active" id="start">
+
+    <div class="heart">❤️</div>
+
+    <h1>Our Love Story</h1>
+
+    <p style="font-size:18px;margin-top:15px">
+        For My Beautiful Wife
+    </p>
+
+    <h2 style="margin-top:10px">Muskan 💗</h2>
+
+    <p style="margin-top:20px">
+        Ek chhoti si duniya sirf hum dono ke liye...
+    </p>
+
+    <button class="heart-btn" onclick="startLove()">
+        <span>Start Your Love Story 💕</span>
+    </button>
+
+    <p class="small">Made with infinite love by Sahil ❤️</p>
+</section>
+
+<!-- QUIZ SCREEN -->
+<section class="screen" id="quiz">
+    <div class="card">
+        <h2>Love Quiz 💌</h2>
+        <p class="progress" id="progress"></p>
+        <div class="question" id="question"></div>
+        <div id="options"></div>
+        <div id="feedback"></div>
+        <button class="btn" id="nextBtn" onclick="nextQuestion()" style="display:none">
+            Next Question 💗
+        </button>
+    </div>
+</section>
+
+<!-- SCRATCH SCREEN -->
+<section class="screen" id="scratch">
+    <div class="card">
+        <h1>One Last Surprise 🎁</h1>
+        <p>Apni ungli se scratch karo meri jaan ❤️</p>
+
+        <div class="scratch-box">
+            <div class="scratch-message">
+                I love you meri pyari Motiiiiii ❤️
+            </div>
+            <canvas id="scratchCanvas"></canvas>
+        </div>
+
+        <p class="small">Scratch karke apna surprise dekho 🥹</p>
+
+        <button class="btn" onclick="showFinal()">Continue My Love 💖</button>
+    </div>
+</section>
+
+<!-- FINAL SCREEN -->
+<section class="screen" id="final">
+
+    <div class="heart">❤️</div>
+
+    <h1>My Forever Muskan</h1>
+
+    <div class="card final-message">
+        <strong>I love you yaar muskan mera Bahadur baccha 🥺</strong>
+
+        <br><br>
+
+        Sahil Aape bhout bhout jayda haad se Jayda bhout jayda se v Jayda Mohabbat Karta hai
+
+        <br><br>
+
+        Allah pak hamesha Aap ka Hifazat kare Muskan Aap ka har musibat Taklif Mera sar dal se Aap ka har Baddua sahil ke sath aa jaye .
+
+        <br><br>
+
+        Ameen summa ameen ❤️🌷
+
+        <br><br>
+
+        <h2>Forever & Always 💞</h2>
+
+        <p>Yours lovingly, Sahil ❤️</p>
+    </div>
+
+    <button class="btn" onclick="celebrate()">I Love You Too ❤️</button>
+</section>
+
+<script>
+
+// Floating Hearts Background
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "floating-heart";
+    heart.innerHTML = ["❤️","💗","💕","🌸","💖"][Math.floor(Math.random()*5)];
+    heart.style.left = Math.random()*100+"vw";
+    heart.style.animationDuration = (5+Math.random()*5)+"s";
+    document.body.appendChild(heart);
+
+    setTimeout(()=>heart.remove(),10000);
+}
+setInterval(createHeart,400);
+
+// Screens
+function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+// Start + Music
+function startLove() {
+    const music = document.getElementById("loveSong");
+    music.play().catch(()=>{
+        alert("Song play nahi hua. song.mp3 file check karo ❤️");
+    });
+
+    showScreen("quiz");
+    loadQuestion();
+}
+
+// Quiz Data
+const quiz = [
+    {
+        q:"Sahil Aapse Kitna Pyar Karta Hai? ❤️",
+        options:["Bhout","Bhout jayda","Haad se Jayda","Koi haad nhi"],
+        correct:3
+    },
+    {
+        q:"Sahil Sabse pahle kon sa nickname diye tha Aap ko? 🥰",
+        options:["Onjo","Ziddi bacchi","Nimki"],
+        correct:2
+    },
+    {
+        q:"Muskan our Sahil ka favourite colour kya hai? 🖤",
+        options:["Red","Black","Pink"],
+        correct:1
+    },
+    {
+        q:"Muskan ne Sahil ko First nickname kya Diya tha? 😚",
+        options:["Barsati Medak","Pinky","Ziddi insaan"],
+        correct:1
+    },
+    {
+        q:"Sahil our Muskan ka Relationship ka Kitna years ho raha hai? 💞",
+        options:["8 years","10 years","11 years"],
+        correct:2
+    },
+    {
+        q:"Sahil Muskan ko Sabse jyada kya bolta hai? 🥺",
+        options:["Baccha","Babu","Beta"],
+        correct:0
+    },
+    {
+        q:"Sahil ko sabse jyada gussa kab aata hai? 😤❤️",
+        options:[
+            "Jab Muskan khud ka dhyan nahi rakhte hai",
+            "Jab Muskan bahar ka junk food khate hai",
+            "Jab time se khana nahi khate hai"
+        ],
+        correct:0
+    },
+    {
+        q:"Sahil ko Muskan ke sabse jyada kya pasand hai? 😳😚",
+        options:[],
+        special:true
+    }
+];
+
+let current = 0;
+
+function loadQuestion() {
+    const q = quiz[current];
+
+    document.getElementById("progress").innerText =
+        `Question ${current+1} / ${quiz.length}`;
+
+    document.getElementById("question").innerText = q.q;
+
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("nextBtn").style.display = "none";
+
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    if(q.special) {
+        const answer = document.createElement("div");
+        answer.innerHTML = `
+        <p style="font-size:22px;line-height:1.8">
+        Ye v koi puchne ka baat hua pure ke pure Muskan pasand hai Sahil koi ek pure ke pure 😳😚
+        </p>
+        `;
+        optionsDiv.appendChild(answer);
+
+        document.getElementById("feedback").innerText =
+            "Correct answer: Puri ki puri Muskan ❤️";
+
+        document.getElementById("nextBtn").style.display = "inline-block";
+        return;
+    }
+
+    q.options.forEach((option,index)=>{
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.innerText = option;
+
+        btn.onclick = ()=>checkAnswer(index,btn);
+
+        optionsDiv.appendChild(btn);
+    });
+}
+
+function checkAnswer(index,btn) {
+    const q = quiz[current];
+    const allButtons = document.querySelectorAll(".option");
+
+    allButtons.forEach(b=>b.disabled=true);
+
+    if(index===q.correct) {
+        btn.classList.add("correct");
+
+        document.getElementById("feedback").innerText =
+            "Bilkul sahi meri jaan! ❤️🥹";
+    } else {
+        btn.classList.add("wrong");
+        allButtons[q.correct].classList.add("correct");
+
+        document.getElementById("feedback").innerText =
+            "Galat jawab jaan! Green wala sahi hai 💗";
+    }
+
+    document.getElementById("nextBtn").style.display = "inline-block";
+}
+
+function nextQuestion() {
+    current++;
+
+    if(current<quiz.length) {
+        loadQuestion();
+    } else {
+        showScreen("scratch");
+        initScratch();
+    }
+}
+
+// Scratch Card
+let canvas,ctx;
+let scratching=false;
+
+function initScratch() {
+    canvas=document.getElementById("scratchCanvas");
+    ctx=canvas.getContext("2d");
+
+    canvas.width=canvas.offsetWidth*2;
+    canvas.height=canvas.offsetHeight*2;
+
+    ctx.scale(2,2);
+
+    const gradient=ctx.createLinearGradient(0,0,300,200);
+    gradient.addColorStop(0,"#ff70ac");
+    gradient.addColorStop(1,"#ff1493");
+
+    ctx.fillStyle=gradient;
+    ctx.fillRect(0,0,300,200);
+
+    ctx.fillStyle="white";
+    ctx.font="bold 24px Poppins";
+    ctx.textAlign="center";
+    ctx.fillText("Scratch Me 💗",150,95);
+
+    ctx.font="18px Poppins";
+    ctx.fillText("My Love ❤️",150,130);
+
+    ctx.globalCompositeOperation="destination-out";
+
+    canvas.onpointerdown=()=>{
+        scratching=true;
+    };
+
+    canvas.onpointerup=()=>{
+        scratching=false;
+    };
+
+    canvas.onpointermove=(e)=>{
+        if(!scratching)return;
+
+        const rect=canvas.getBoundingClientRect();
+        const x=(e.clientX-rect.left)*(300/rect.width);
+        const y=(e.clientY-rect.top)*(200/rect.height);
+
+        ctx.beginPath();
+        ctx.arc(x,y,25,0,Math.PI*2);
+        ctx.fill();
+    };
+}
+
+function showFinal() {
+    showScreen("final");
+}
+
+function celebrate() {
+    for(let i=0;i<30;i++) {
+        setTimeout(createHeart,i*100);
+    }
+
+    alert("Sahil ❤️ Muskan = Forever & Always 🥹🌷");
+}
+</script>
+
+</body>
+</html>
